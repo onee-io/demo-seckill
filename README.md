@@ -12,3 +12,7 @@ IDEA + Maven3.3.9 + JDK8 + Tomcat8.0 + MySQL5.5
 - 搭建项目基础架构
 - 建立数据库环境
 - 编写DAO层接口实现
+
+#### 2017.04.05
+- 完成MyBatis与Spring整合
+- 添加DAO的单元测试
