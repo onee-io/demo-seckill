@@ -1,5 +1,6 @@
 package top.onee.seckill.dao;
 
+import org.apache.ibatis.annotations.Param;
 import top.onee.seckill.entity.Successkilled;
 
 /**
@@ -13,13 +14,13 @@ public interface SuccessKilledDao {
      * @param userPhone
      * @return 插入的行数
      */
-    int insertSuccessKilled(long suckillId, long userPhone);
+    int insertSuccessKilled(@Param("suckillId") long suckillId, @Param("userPhone") long userPhone);
 
     /**
      * 根据ID查询SuccessKilled并携带秒杀产品对象实体
      * @param seckilled
      * @return
      */
-    Successkilled queryByIdWithSeckill(long seckilled);
+    Successkilled queryByIdWithSeckill(@Param("seckilled") long seckilled, @Param("userPhone") long userPhone);
 
 }
