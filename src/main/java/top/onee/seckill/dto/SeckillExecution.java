@@ -1,6 +1,7 @@
 package top.onee.seckill.dto;
 
 import top.onee.seckill.entity.Successkilled;
+import top.onee.seckill.enums.SeckillStatEnum;
 
 /**
  * 秒杀执行结果
@@ -21,18 +22,18 @@ public class SeckillExecution {
     private Successkilled successkilled;
 
     // 秒杀成功返回所有信息
-    public SeckillExecution(long seckillId, int state, String stateInfo, Successkilled successkilled) {
+    public SeckillExecution(long seckillId, SeckillStatEnum seckillStatEnum, Successkilled successkilled) {
         this.seckillId = seckillId;
-        this.state = state;
-        this.stateInfo = stateInfo;
+        this.state = seckillStatEnum.getState();
+        this.stateInfo = seckillStatEnum.getInfo();
         this.successkilled = successkilled;
     }
 
     // 秒杀失败
-    public SeckillExecution(long seckillId, int state, String stateInfo) {
+    public SeckillExecution(long seckillId, SeckillStatEnum seckillStatEnum) {
         this.seckillId = seckillId;
-        this.state = state;
-        this.stateInfo = stateInfo;
+        this.state = seckillStatEnum.getState();
+        this.stateInfo = seckillStatEnum.getInfo();
     }
 
     public long getSeckillId() {
