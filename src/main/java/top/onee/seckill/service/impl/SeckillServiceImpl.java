@@ -2,6 +2,9 @@ package top.onee.seckill.service.impl;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import top.onee.seckill.dao.SeckillDao;
 import top.onee.seckill.dao.SuccessKilledDao;
@@ -15,7 +18,6 @@ import top.onee.seckill.exception.SeckillCloseException;
 import top.onee.seckill.exception.SeckillException;
 import top.onee.seckill.service.SeckillService;
 
-import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -23,6 +25,7 @@ import java.util.List;
  * 秒杀业务接口实现
  * Created by VOREVER on 08/04/2017.
  */
+@Service
 public class SeckillServiceImpl implements SeckillService {
 
     // 记录日志
@@ -31,10 +34,10 @@ public class SeckillServiceImpl implements SeckillService {
     // 加密盐值
     private final String salt = "Be6^$Kdb&uw74waf6#$Wr24f";
 
-    @Resource
+    @Autowired
     private SeckillDao seckillDao;
 
-    @Resource
+    @Autowired
     private SuccessKilledDao successKilledDao;
 
     @Override
@@ -71,7 +74,16 @@ public class SeckillServiceImpl implements SeckillService {
         return DigestUtils.md5DigestAsHex(base.getBytes());
     }
 
+
     @Override
+    @Transactional
+    /**
+     * 使用Spring注解控制事务的优点：
+     * 1、开发团队达成一致的约定，明确标注事务方法的编程风格
+     * 2、保证事务方法的执行时间尽可能断，不要穿插其他的网络操作，
+     * 3、不是所有的方法都需要事务，如只有一条修改操作，只读操作不需要事务控制
+     * 注：只有捕获运行期异常（RuntimeException）才会进行回滚操作
+     */
     public SeckillExecution executeSeckill(long seckillId, long userPhone, String md5) {
         if (md5 == null || !md5.equals(getMD5(seckillId))) {
             // 数据篡改
@@ -104,6 +116,5 @@ public class SeckillServiceImpl implements SeckillService {
             logger.error(e.getMessage(), e);
             throw new SeckillException("seckill inner error: " + e.getMessage());
         }
-
     }
 }

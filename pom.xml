@@ -109,6 +109,7 @@
             <artifactId>spring-jdbc</artifactId>
             <version>4.3.5.RELEASE</version>
         </dependency>
+        <!--事务操作-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-tx</artifactId>

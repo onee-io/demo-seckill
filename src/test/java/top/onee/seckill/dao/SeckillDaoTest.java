@@ -2,6 +2,7 @@ package top.onee.seckill.dao;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import top.onee.seckill.entity.Seckill;
@@ -19,7 +20,7 @@ import java.util.List;
 @ContextConfiguration({"classpath:spring/spring-dao.xml"})
 public class SeckillDaoTest {
 
-    @Resource
+    @Autowired
     private SeckillDao seckillDao;
 
     @Test
