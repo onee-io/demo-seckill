@@ -12,26 +12,6 @@
     <context:property-placeholder location="classpath:jdbc.properties"/>
 
     <!--数据库连接池-->
-    <!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource">-->
-        <!--&lt;!&ndash;配置连接池属性&ndash;&gt;-->
-        <!--<property name="driverClass" value="${jdbc.driver}"/>-->
-
-        <!--&lt;!&ndash;基本属性&ndash;&gt;-->
-        <!--<property name="jdbcUrl" value="${jdbc.url}"/>-->
-        <!--<property name="user" value="${jdbc.username}"/>-->
-        <!--<property name="password" value="${jdbc.password}"/>-->
-
-        <!--&lt;!&ndash;c3p0私有属性&ndash;&gt;-->
-        <!--<property name="maxPoolSize" value="30"/>-->
-        <!--<property name="minPoolSize" value="10"/>-->
-        <!--&lt;!&ndash;关闭连接后不自动commit&ndash;&gt;-->
-        <!--<property name="autoCommitOnClose" value="false"/>-->
-
-        <!--&lt;!&ndash;获取连接超时时间&ndash;&gt;-->
-        <!--<property name="checkoutTimeout" value="1000"/>-->
-        <!--&lt;!&ndash;获取连接失败重试次数&ndash;&gt;-->
-        <!--<property name="acquireRetryAttempts" value="2"/>-->
-    <!--</bean>-->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">
         <!--基本属性-->
         <property name="url" value="${jdbc.url}"/>
@@ -56,8 +36,8 @@
 
         <!--打开PSCache，并且指定每个连接上的PSCache的大小-->
         <!--Oracle建议打开poolPreparedStatements，mysql可以设置为false，分库分表较多的数据库建议false-->
-        <property name="poolPreparedStatements" value="true"/>
-        <property name="maxPoolPreparedStatementPerConnectionSize" value="20"/>
+        <property name="poolPreparedStatements" value="false"/>
+        <!--<property name="maxPoolPreparedStatementPerConnectionSize" value="20"/>-->
 
         <!--配置监控统计拦截的filters-->
         <property name="filters" value="stat"/>
