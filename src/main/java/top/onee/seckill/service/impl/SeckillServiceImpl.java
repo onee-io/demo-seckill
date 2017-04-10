@@ -83,7 +83,8 @@ public class SeckillServiceImpl implements SeckillService {
      * 3、不是所有的方法都需要事务，如只有一条修改操作，只读操作不需要事务控制
      * 注：只有捕获运行期异常（RuntimeException）才会进行回滚操作
      */
-    public SeckillExecution executeSeckill(long seckillId, long userPhone, String md5) {
+    public SeckillExecution executeSeckill(long seckillId, long userPhone, String md5)
+            throws SeckillCloseException, RepeatKillException, SeckillException{
         if (md5 == null || !md5.equals(getMD5(seckillId))) {
             // 数据篡改
             throw new SeckillException("seckill data rewrite");
@@ -107,10 +108,10 @@ public class SeckillServiceImpl implements SeckillService {
                     return new SeckillExecution(seckillId, SeckillStatEnum.SUCCESS, successkilled);
                 }
             }
-        } catch (SeckillCloseException e1) {
-            throw e1;
-        } catch (RepeatKillException e2) {
-            throw e2;
+        } catch (SeckillCloseException e) {
+            throw e;
+        } catch (RepeatKillException e) {
+            throw e;
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
             throw new SeckillException("seckill inner error: " + e.getMessage());

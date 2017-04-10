@@ -3,6 +3,9 @@ package top.onee.seckill.service;
 import top.onee.seckill.dto.Exposer;
 import top.onee.seckill.dto.SeckillExecution;
 import top.onee.seckill.entity.Seckill;
+import top.onee.seckill.exception.RepeatKillException;
+import top.onee.seckill.exception.SeckillCloseException;
+import top.onee.seckill.exception.SeckillException;
 
 import java.util.List;
 
@@ -41,5 +44,6 @@ public interface SeckillService {
      * @param userPhone
      * @param md5
      */
-    SeckillExecution executeSeckill(long seckillId, long userPhone, String md5);
+    SeckillExecution executeSeckill(long seckillId, long userPhone, String md5)
+            throws SeckillCloseException, RepeatKillException, SeckillException;
 }
