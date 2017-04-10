@@ -74,7 +74,6 @@ public class SeckillServiceImpl implements SeckillService {
         return DigestUtils.md5DigestAsHex(base.getBytes());
     }
 
-
     @Override
     @Transactional
     /**
