@@ -24,3 +24,6 @@ IDEA + Maven3.3.9 + JDK8 + Tomcat8.0 + MySQL5.5
 #### 2017.04.10
 - 添加Spring MVC配置
 - 完成Controller编写
+
+#### 2017.04.12
+- 完成页面交互逻辑
