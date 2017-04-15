@@ -64,4 +64,9 @@
         <property name="basePackage" value="top.onee.seckill.dao"/>
     </bean>
 
+    <bean id="redisDao" class="top.onee.seckill.dao.cache.RedisDao">
+        <constructor-arg index="0" value="${redis.host}"/>
+        <constructor-arg index="1" value="${redis.port}"/>
+    </bean>
+
 </beans>
