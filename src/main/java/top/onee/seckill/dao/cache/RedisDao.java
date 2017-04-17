@@ -18,8 +18,8 @@ public class RedisDao {
 
     private final JedisPool jedisPool;
 
-    public RedisDao(String ip, int port) {
-        jedisPool = new JedisPool(ip, port);
+    public RedisDao(String host, int port) {
+        jedisPool = new JedisPool(host, port);
     }
 
     private RuntimeSchema<Seckill> schema = RuntimeSchema.createFrom(Seckill.class);

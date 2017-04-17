@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.DigestUtils;
 import top.onee.seckill.dao.SeckillDao;
 import top.onee.seckill.dao.SuccessKilledDao;
+import top.onee.seckill.dao.cache.RedisDao;
 import top.onee.seckill.dto.Exposer;
 import top.onee.seckill.dto.SeckillExecution;
 import top.onee.seckill.entity.Seckill;
@@ -18,6 +19,7 @@ import top.onee.seckill.exception.SeckillCloseException;
 import top.onee.seckill.exception.SeckillException;
 import top.onee.seckill.service.SeckillService;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -40,6 +42,9 @@ public class SeckillServiceImpl implements SeckillService {
     @Autowired
     private SuccessKilledDao successKilledDao;
 
+    @Autowired
+    private RedisDao redisDao;
+
     @Override
     public List<Seckill> getSeckillList() {
         return seckillDao.queryAll(0, 4);
@@ -52,10 +57,17 @@ public class SeckillServiceImpl implements SeckillService {
 
     @Override
     public Exposer exportSeckillUrl(long seckillId) {
-        Seckill seckill = seckillDao.queryById(seckillId);
-        // 校验是否由此秒杀商品
+        // 访问redis检索是否有此商品
+        Seckill seckill = redisDao.getSeckill(seckillId);
         if (seckill == null) {
-            return new Exposer(false, seckillId);
+            // 访问数据库检索 校验是否由此秒杀商品
+            seckill = seckillDao.queryById(seckillId);
+            if (seckill == null) {
+                return new Exposer(false, seckillId);
+            } else {
+                // 存入redis
+                redisDao.putSeckill(seckill);
+            }
         }
         Date startTime = seckill.getStartTime();
         Date endTime = seckill.getEndTime();
@@ -74,8 +86,7 @@ public class SeckillServiceImpl implements SeckillService {
         return DigestUtils.md5DigestAsHex(base.getBytes());
     }
 
-    @Override
-    @Transactional
+
     /**
      * 使用Spring注解控制事务的优点：
      * 1、开发团队达成一致的约定，明确标注事务方法的编程风格
@@ -83,6 +94,8 @@ public class SeckillServiceImpl implements SeckillService {
      * 3、不是所有的方法都需要事务，如只有一条修改操作，只读操作不需要事务控制
      * 注：只有捕获运行期异常（RuntimeException）才会进行回滚操作
      */
+    @Override
+    @Transactional
     public SeckillExecution executeSeckill(long seckillId, long userPhone, String md5)
             throws SeckillCloseException, RepeatKillException, SeckillException{
         if (md5 == null || !md5.equals(getMD5(seckillId))) {
