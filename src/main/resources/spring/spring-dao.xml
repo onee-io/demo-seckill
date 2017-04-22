@@ -9,7 +9,9 @@
 
     <!--配置整合MyBatis-->
     <!--配置数据库相关参数-->
-    <context:property-placeholder location="classpath:config/jdbc.properties"/>
+    <context:property-placeholder location="classpath:config/jdbc.properties" ignore-unresolvable="true"/>
+
+    <context:component-scan base-package="top.onee.seckill.dao"/>
 
     <!--数据库连接池-->
     <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close">

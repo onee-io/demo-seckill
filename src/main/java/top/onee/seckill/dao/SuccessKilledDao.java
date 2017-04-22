@@ -1,11 +1,13 @@
 package top.onee.seckill.dao;
 
 import org.apache.ibatis.annotations.Param;
+import org.springframework.stereotype.Repository;
 import top.onee.seckill.entity.Successkilled;
 
 /**
  * Created by VOREVER on 04/04/2017.
  */
+@Repository
 public interface SuccessKilledDao {
 
     /**

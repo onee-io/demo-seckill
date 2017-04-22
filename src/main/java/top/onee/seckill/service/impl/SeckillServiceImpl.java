@@ -19,7 +19,6 @@ import top.onee.seckill.exception.SeckillCloseException;
 import top.onee.seckill.exception.SeckillException;
 import top.onee.seckill.service.SeckillService;
 
-import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -104,17 +103,17 @@ public class SeckillServiceImpl implements SeckillService {
         }
         Date now = new Date();
         try {
-            // 减库存
-            int updateCount = seckillDao.reduceNumber(seckillId, now);
-            if (updateCount <= 0) {
-                // 秒杀关闭（库存不足或时间不符）
-                throw new SeckillCloseException("seckill close");
+            // 插入购买记录
+            int insertCount = successKilledDao.insertSuccessKilled(seckillId, userPhone);
+            if (insertCount <= 0) {
+                // 重复秒杀
+                throw new RepeatKillException("repeate seckill");
             } else {
-                // 插入购买记录
-                int insertCount = successKilledDao.insertSuccessKilled(seckillId, userPhone);
-                if (insertCount <= 0) {
-                    // 重复秒杀
-                    throw new RepeatKillException("repeate seckill");
+                // 减库存
+                int updateCount = seckillDao.reduceNumber(seckillId, now);
+                if (updateCount <= 0) {
+                    // 秒杀关闭（库存不足或时间不符）
+                    throw new SeckillCloseException("seckill close");
                 } else {
                     // 查询购买记录
                     Successkilled successkilled = successKilledDao.queryByIdWithSeckill(seckillId, userPhone);
